@@ -1,4 +1,4 @@
-package org.example;
+package org.agenda;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,5 +13,4 @@ class AgendaTest {
         assertInstanceOf(Appointment.class, appointment);
         assertNotNull(appointment.getDateTime());
     }
-
 }
