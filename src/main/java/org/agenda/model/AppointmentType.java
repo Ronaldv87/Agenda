@@ -1,4 +1,4 @@
-package org.agenda;
+package org.agenda.model;
 
 public enum AppointmentType {
     VIDEO,
