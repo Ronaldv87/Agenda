@@ -3,13 +3,12 @@ package org.agenda.repo;
 import org.agenda.model.Appointment;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentCacheRepository {
 
-    final List<Appointment> appointmentList = new ArrayList<>();
+    private List<Appointment> appointmentList = new ArrayList<>();
 
     public AppointmentCacheRepository() {
 //        appointmentList.add(new Appointment());
@@ -28,6 +27,14 @@ public class AppointmentCacheRepository {
 
     // read
     // appointmentList.read(id);
+    public Appointment read(final int appointmentId) {
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointmentId() == appointmentId) {
+                return appointment;
+            }
+        }
+        return null;
+    }
 
     // update
     // appointmentList.update(appointment);
@@ -37,4 +44,12 @@ public class AppointmentCacheRepository {
 
     // list
     // return appointmentList;
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
+    }
 }
