@@ -1,9 +1,10 @@
 package org.agenda.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+
 
 public class VideoAppointment extends Appointment{
-    public VideoAppointment(int appointmentId, LocalTime startTime, LocalTime endTime) {
-        super(appointmentId, startTime, endTime);
+    public VideoAppointment(int appointmentId, LocalDateTime startDateTime, LocalDateTime endDateime) {
+        super(appointmentId, startDateTime, endDateime);
     }
 }

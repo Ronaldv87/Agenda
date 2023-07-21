@@ -1,31 +1,39 @@
 package org.agenda.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Appointment {
     private final int appointmentId;
-    private final LocalTime startTime;
-    private final LocalTime endTime;
+    private final LocalDateTime startDateTime;
+    private final LocalDateTime endDateTime;
 
-    public Appointment(int appointmentId, LocalTime startTime, LocalTime endTime) {
+    public Appointment(final int appointmentId,
+                       final LocalDateTime startDateTime,
+                       final LocalDateTime endDateTime) {
+        if (appointmentId < 1) {
+            throw new IllegalArgumentException("id cannot be negative");
+        }
+        if (startDateTime == null) {
+            throw new IllegalArgumentException("startDateTime cannot be null");
+        }
+        if (endDateTime == null) {
+            throw new IllegalArgumentException("endDateTime cannot be null");
+        }
+
         this.appointmentId = appointmentId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-    public Appointment getAppointment() {
-        return new Appointment(appointmentId, startTime, endTime);
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
     }
 
     public int getAppointmentId() {
         return appointmentId;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public LocalTime getEndTime() {
-        return endTime;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 }
