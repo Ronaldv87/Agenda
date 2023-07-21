@@ -13,13 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AppointmentCacheRepositoryTest {
     private AppointmentCacheRepository appointmentCacheRepository;
+    private final int appointmentId = 1;
     private final LocalDateTime startDateTime = LocalDateTime.now();
     private final LocalDateTime endDateTime = startDateTime.plusHours(1);
 
     @BeforeEach
     void setupTest() {
         this.appointmentCacheRepository = new AppointmentCacheRepository();
-        this.appointmentCacheRepository.setAppointmentList(createAppointmentList(1));
+        this.appointmentCacheRepository.setList(createAppointmentList(1));
     }
 
     @AfterEach
@@ -34,7 +35,7 @@ class AppointmentCacheRepositoryTest {
         final LocalDateTime startDateTime = LocalDateTime.now();
         final LocalDateTime endDateTime = startDateTime.plusHours(1);
         this.appointmentCacheRepository = new AppointmentCacheRepository();
-        assertEquals(0, appointmentCacheRepository.getAppointmentList().size());
+        assertEquals(0, appointmentCacheRepository.getList().size());
 
         //When
 
@@ -45,7 +46,20 @@ class AppointmentCacheRepositoryTest {
         assertEquals(appointmentId, appointment.getAppointmentId());
         assertEquals(startDateTime, appointment.getStartDateTime());
         assertEquals(endDateTime, appointment.getEndDateTime());
-        assertEquals(1, appointmentCacheRepository.getAppointmentList().size());
+        assertEquals(1, appointmentCacheRepository.getList().size());
+    }
+
+    @Test
+    void create_shouldThrowIllegalArgumentException_appointmentAlreadyExists() {
+        //Given
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+                appointmentCacheRepository.create(appointmentId, startDateTime, endDateTime));
+
+        //Then
+        assertEquals("This appointment with " + appointmentId + " already exists", thrown.getMessage());
     }
 
     @Test
@@ -80,7 +94,7 @@ class AppointmentCacheRepositoryTest {
     private List<Appointment> createAppointmentList(final int appointmentNumber) {
         final List<Appointment> appointmentList = new ArrayList<>();
         for (int n = 0; n < appointmentNumber; n++) {
-            appointmentList.add(createAppointment(1 + n));
+            appointmentList.add(createAppointment(appointmentId + n));
         }
         return appointmentList;
     }
