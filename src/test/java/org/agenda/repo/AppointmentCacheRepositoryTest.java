@@ -1,5 +1,6 @@
 package org.agenda.repo;
 
+import net.bytebuddy.asm.Advice;
 import org.agenda.model.Appointment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,6 +90,77 @@ class AppointmentCacheRepositoryTest {
 
         //Then
         assertNull(appointment);
+    }
+
+    @Test
+    void update_happyFlow() {
+        //Given
+        final LocalDateTime startDateTime = LocalDateTime.now().plusMinutes(10);
+        final LocalDateTime endDateTime = startDateTime.plusMinutes(30);
+        Appointment updatedAppointment = new Appointment( appointmentId, startDateTime,endDateTime);
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final Appointment appointment = appointmentCacheRepository.update(updatedAppointment);
+
+        //Then
+        assertNotNull(appointment);
+        assertEquals(appointmentId, appointment.getAppointmentId());
+        assertEquals(startDateTime, appointment.getStartDateTime());
+        assertEquals(endDateTime, appointment.getEndDateTime());
+        assertEquals(1, appointmentCacheRepository.getList().size());
+    }
+
+    @Test
+    void update_shouldThrowIllegalArgumentException_appointmentDoesNotExists() {
+        //Given
+        Appointment appointment = new Appointment( appointmentId,
+                LocalDateTime.now().plusMinutes(10),
+                startDateTime.plusMinutes(30));
+        this.appointmentCacheRepository = new AppointmentCacheRepository();
+        assertEquals(0, appointmentCacheRepository.getList().size());
+
+        //When
+        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+                appointmentCacheRepository.update(appointment));
+
+        //Then
+        assertEquals("Appointment with id " + appointmentId + " not found", thrown.getMessage());
+    }
+
+    @Test
+    void delete_happyFlow() {
+        //Given
+        Appointment appointmentToDelete = new Appointment(appointmentId, startDateTime, endDateTime);
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final Appointment appointment = appointmentCacheRepository.delete(appointmentToDelete);
+
+        //Then
+        assertNotNull(appointment);
+        assertEquals(appointmentId, appointment.getAppointmentId());
+        assertEquals(startDateTime, appointment.getStartDateTime());
+        assertEquals(endDateTime, appointment.getEndDateTime());
+        assertEquals(0, appointmentCacheRepository.getList().size());
+    }
+
+    @Test
+    void delete_shouldThrowIllegalArgumentException_appointmentDoesNotExists() {
+        //Given
+        final int appointmentId = 9999;
+        Appointment appointmentToDelete = new Appointment(appointmentId,
+                startDateTime.plusHours(1),
+                endDateTime.plusHours(1));
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+                appointmentCacheRepository.delete(appointmentToDelete));
+
+        //Then
+        assertEquals("Appointment with id " + appointmentId + " not found", thrown.getMessage());
+        assertEquals(1, appointmentCacheRepository.getList().size());
     }
 
     private List<Appointment> createAppointmentList(final int appointmentNumber) {

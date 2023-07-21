@@ -48,13 +48,34 @@ public class AppointmentCacheRepository {
 
     // update
     // appointmentList.update(appointment);
+    public Appointment update(Appointment appointment) throws IllegalArgumentException {
+        for(Appointment appointmentToFind : appointmentList) {
+            if(appointmentToFind.getAppointmentId() == appointment.getAppointmentId()) {
+                int index = appointmentList.indexOf(appointmentToFind);
+                appointmentList.get(index).setStartDateTime(appointment.getStartDateTime());
+                appointmentList.get(index).setEndDateTime(appointment.getEndDateTime());
+                return appointmentList.get(index);
+            }
+        }
+        throw new IllegalArgumentException("Appointment with id " + appointment.getAppointmentId() + " not found");
+    }
 
     // delete
     // appointmentList.delete(appointment / id);
+    public Appointment delete(Appointment appointment) throws IllegalArgumentException {
+        for(Appointment appointmentToDelete : appointmentList) {
+            if(appointmentToDelete.getAppointmentId() == appointment.getAppointmentId()) {
+                appointmentList.remove(appointmentToDelete);
+                //Should I even return an appointment? Perhaps we want to know which appointment was deleted.
+                //Otherwise, might as well make this method void.
+                return appointmentToDelete;
+            }
+        }
+        throw new IllegalArgumentException("Appointment with id " + appointment.getAppointmentId() + " not found");
+    }
 
     // list
     // return appointmentList;
-
     public List<Appointment> getList() {
         return appointmentList;
     }
