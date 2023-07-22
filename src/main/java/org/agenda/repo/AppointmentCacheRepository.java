@@ -18,7 +18,7 @@ public class AppointmentCacheRepository {
     // appointmentList.create(string[] inputData);
     public Appointment create(final int appointmentId,
                               final LocalDateTime startDateTime,
-                              final LocalDateTime endDateTime) throws IllegalArgumentException{
+                              final LocalDateTime endDateTime) throws CreationException{
         final Appointment appointment = new Appointment(appointmentId, startDateTime, endDateTime);
         boolean appointmentIsAlreadyPresent = false;
         for (Appointment existingEntry : appointmentList) {
@@ -30,7 +30,7 @@ public class AppointmentCacheRepository {
         if(!appointmentIsAlreadyPresent) {
             this.appointmentList.add(appointment);
         } else {
-            throw new IllegalArgumentException("This appointment with " + appointment.getAppointmentId() + " already exists");
+            throw new CreationException("This appointment with " + appointment.getAppointmentId() + " already exists");
         }
         return appointment;
     }

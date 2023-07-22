@@ -50,12 +50,12 @@ class AppointmentCacheRepositoryTest {
     }
 
     @Test
-    void create_shouldThrowIllegalArgumentException_appointmentAlreadyExists() {
+    void create_shouldThrowCreationException_appointmentAlreadyExists() {
         //Given
         assertEquals(1, appointmentCacheRepository.getList().size());
 
         //When
-        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+        final CreationException thrown = assertThrows(CreationException.class, () ->
                 appointmentCacheRepository.create(appointmentId, startDateTime, endDateTime));
 
         //Then
