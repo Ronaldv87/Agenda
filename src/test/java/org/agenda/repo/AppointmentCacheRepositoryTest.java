@@ -79,48 +79,49 @@ class AppointmentCacheRepositoryTest {
     }
 
     @Test
-    void read_returnsNull_whenAppointmentDoesNotExist() {
+    void read_shouldThrowReadException_appointmentDoesNotExists() {
         //Given
         final int appointmentId = 1;
         this.appointmentCacheRepository = new AppointmentCacheRepository();
 
         //When
-        final Appointment appointment = appointmentCacheRepository.read(appointmentId);
+        final ReadException thrown = assertThrows(ReadException.class, () ->
+                appointmentCacheRepository.read(appointmentId));
 
         //Then
-        assertNull(appointment);
+        assertEquals("Appointment with id " + appointmentId + " not found", thrown.getMessage());
     }
 
     @Test
     void update_happyFlow() {
         //Given
-        final LocalDateTime startDateTime = LocalDateTime.now().plusMinutes(10);
-        final LocalDateTime endDateTime = startDateTime.plusMinutes(30);
-        Appointment updatedAppointment = new Appointment( appointmentId, startDateTime,endDateTime);
+        final LocalDateTime updateStartDateTime = LocalDateTime.now().plusMinutes(10);
+        final LocalDateTime updateEndDateTime = updateStartDateTime.plusMinutes(30);
+        Appointment appointment = new Appointment( appointmentId, updateStartDateTime,updateEndDateTime);
         assertEquals(1, appointmentCacheRepository.getList().size());
 
         //When
-        final Appointment appointment = appointmentCacheRepository.update(updatedAppointment);
+        final Appointment updatedAppointment = appointmentCacheRepository.update(appointment);
 
         //Then
-        assertNotNull(appointment);
-        assertEquals(appointmentId, appointment.getAppointmentId());
-        assertEquals(startDateTime, appointment.getStartDateTime());
-        assertEquals(endDateTime, appointment.getEndDateTime());
+        assertNotNull(updatedAppointment);
+        assertEquals(appointmentId, updatedAppointment.getAppointmentId());
+        assertEquals(updateStartDateTime, updatedAppointment.getStartDateTime());
+        assertEquals(updateEndDateTime, updatedAppointment.getEndDateTime());
         assertEquals(1, appointmentCacheRepository.getList().size());
     }
 
     @Test
-    void update_shouldThrowIllegalArgumentException_appointmentDoesNotExists() {
+    void update_shouldThrowUpdateException_appointmentDoesNotExists() {
         //Given
         Appointment appointment = new Appointment( appointmentId,
-                LocalDateTime.now().plusMinutes(10),
+                startDateTime.plusMinutes(10),
                 startDateTime.plusMinutes(30));
         this.appointmentCacheRepository = new AppointmentCacheRepository();
         assertEquals(0, appointmentCacheRepository.getList().size());
 
         //When
-        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+        final UpdateExeption thrown = assertThrows(UpdateExeption.class, () ->
                 appointmentCacheRepository.update(appointment));
 
         //Then
@@ -134,18 +135,15 @@ class AppointmentCacheRepositoryTest {
         assertEquals(1, appointmentCacheRepository.getList().size());
 
         //When
-        final Appointment appointment = appointmentCacheRepository.delete(appointmentToDelete);
+        final boolean appointment = appointmentCacheRepository.delete(appointmentToDelete);
 
         //Then
-        assertNotNull(appointment);
-        assertEquals(appointmentId, appointment.getAppointmentId());
-        assertEquals(startDateTime, appointment.getStartDateTime());
-        assertEquals(endDateTime, appointment.getEndDateTime());
+        assertTrue(appointment);
         assertEquals(0, appointmentCacheRepository.getList().size());
     }
 
     @Test
-    void delete_shouldThrowIllegalArgumentException_appointmentDoesNotExists() {
+    void delete_shouldThrowDeleteException_appointmentDoesNotExists() {
         //Given
         final int appointmentId = 9999;
         Appointment appointmentToDelete = new Appointment(appointmentId,
@@ -154,7 +152,7 @@ class AppointmentCacheRepositoryTest {
         assertEquals(1, appointmentCacheRepository.getList().size());
 
         //When
-        final IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+        final DeleteException thrown = assertThrows(DeleteException.class, () ->
                 appointmentCacheRepository.delete(appointmentToDelete));
 
         //Then
