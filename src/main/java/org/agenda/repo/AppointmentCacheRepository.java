@@ -14,8 +14,6 @@ public class AppointmentCacheRepository {
 //        appointmentList.add(new Appointment());
     }
 
-    // create
-    // appointmentList.create(string[] inputData);
     public Appointment create(final int appointmentId,
                               final LocalDateTime startDateTime,
                               final LocalDateTime endDateTime) throws CreationException{
@@ -35,28 +33,42 @@ public class AppointmentCacheRepository {
         return appointment;
     }
 
-    // read
-    // appointmentList.read(id);
-    public Appointment read(final int appointmentId) {
+    public Appointment read(final int appointmentId) throws ReadException{
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointmentId() == appointmentId) {
                 return appointment;
             }
         }
-        return null;
+        throw new ReadException("Appointment with id " + appointmentId + " not found");
     }
 
-    // update
-    // appointmentList.update(appointment);
+    public Appointment update(Appointment appointment) throws UpdateExeption {
+        for(Appointment appointmentToUpdate : appointmentList) {
+            if(appointmentToUpdate.getAppointmentId() == appointment.getAppointmentId()) {
+                appointmentToUpdate.setStartDateTime(appointment.getStartDateTime());
+                appointmentToUpdate.setEndDateTime(appointment.getEndDateTime());
+                return appointmentToUpdate;
+            }
+        }
+        throw new UpdateExeption("Appointment with id " + appointment.getAppointmentId() + " not found");
+    }
 
-    // delete
-    // appointmentList.delete(appointment / id);
-
-    // list
-    // return appointmentList;
+    public boolean delete(Appointment appointment) throws DeleteException {
+        for(Appointment appointmentToDelete : appointmentList) {
+            if(appointmentToDelete.getAppointmentId() == appointment.getAppointmentId()) {
+                appointmentList.remove(appointmentToDelete);
+                return true;
+            }
+        }
+        throw new DeleteException("Appointment with id " + appointment.getAppointmentId() + " not found");
+    }
 
     public List<Appointment> getList() {
-        return appointmentList;
+        if(appointmentList == null) {
+            return new ArrayList<>();
+        } else {
+            return appointmentList;
+        }
     }
 
     public void setList(List<Appointment> appointmentList) {
