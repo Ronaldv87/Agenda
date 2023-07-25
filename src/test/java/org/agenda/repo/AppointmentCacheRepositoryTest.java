@@ -160,6 +160,33 @@ class AppointmentCacheRepositoryTest {
         assertEquals(1, appointmentCacheRepository.getList().size());
     }
 
+    @Test
+    void getLIst_happyFlow() {
+        //Given
+
+        //When
+        final List<Appointment> appointmentList = appointmentCacheRepository.getList();
+
+        //Then
+        assertNotNull(appointmentList);
+        assertEquals(1, appointmentList.size());
+
+    }
+
+    @Test
+    void getLIst_returnsNewListWhenNull() {
+        //Given
+        appointmentCacheRepository.setList(null);
+
+        //When
+        final List<Appointment> appointmentList = appointmentCacheRepository.getList();
+
+        //Then
+        assertNotNull(appointmentList);
+        assert(appointmentList.isEmpty());
+
+    }
+
     private List<Appointment> createAppointmentList(final int appointmentNumber) {
         final List<Appointment> appointmentList = new ArrayList<>();
         for (int n = 0; n < appointmentNumber; n++) {
