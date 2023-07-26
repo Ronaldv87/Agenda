@@ -79,16 +79,112 @@ class AppointmentCacheRepositoryTest {
     }
 
     @Test
-    void read_returnsNull_whenAppointmentDoesNotExist() {
+    void read_shouldThrowReadException_appointmentDoesNotExists() {
         //Given
         final int appointmentId = 1;
         this.appointmentCacheRepository = new AppointmentCacheRepository();
 
         //When
-        final Appointment appointment = appointmentCacheRepository.read(appointmentId);
+        final ReadException thrown = assertThrows(ReadException.class, () ->
+                appointmentCacheRepository.read(appointmentId));
 
         //Then
-        assertNull(appointment);
+        assertEquals("Appointment with id " + appointmentId + " not found", thrown.getMessage());
+    }
+
+    @Test
+    void update_happyFlow() {
+        //Given
+        final LocalDateTime updateStartDateTime = LocalDateTime.now().plusMinutes(10);
+        final LocalDateTime updateEndDateTime = updateStartDateTime.plusMinutes(30);
+        Appointment appointment = new Appointment( appointmentId, updateStartDateTime,updateEndDateTime);
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final Appointment updatedAppointment = appointmentCacheRepository.update(appointment);
+
+        //Then
+        assertNotNull(updatedAppointment);
+        assertEquals(appointmentId, updatedAppointment.getAppointmentId());
+        assertEquals(updateStartDateTime, updatedAppointment.getStartDateTime());
+        assertEquals(updateEndDateTime, updatedAppointment.getEndDateTime());
+        assertEquals(1, appointmentCacheRepository.getList().size());
+    }
+
+    @Test
+    void update_shouldThrowUpdateException_appointmentDoesNotExists() {
+        //Given
+        Appointment appointment = new Appointment( appointmentId,
+                startDateTime.plusMinutes(10),
+                startDateTime.plusMinutes(30));
+        this.appointmentCacheRepository = new AppointmentCacheRepository();
+        assertEquals(0, appointmentCacheRepository.getList().size());
+
+        //When
+        final UpdateExeption thrown = assertThrows(UpdateExeption.class, () ->
+                appointmentCacheRepository.update(appointment));
+
+        //Then
+        assertEquals("Appointment with id " + appointmentId + " not found", thrown.getMessage());
+    }
+
+    @Test
+    void delete_happyFlow() {
+        //Given
+        Appointment appointmentToDelete = new Appointment(appointmentId, startDateTime, endDateTime);
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final boolean appointment = appointmentCacheRepository.delete(appointmentToDelete);
+
+        //Then
+        assertTrue(appointment);
+        assertEquals(0, appointmentCacheRepository.getList().size());
+    }
+
+    @Test
+    void delete_shouldThrowDeleteException_appointmentDoesNotExists() {
+        //Given
+        final int appointmentId = 9999;
+        Appointment appointmentToDelete = new Appointment(appointmentId,
+                startDateTime.plusHours(1),
+                endDateTime.plusHours(1));
+        assertEquals(1, appointmentCacheRepository.getList().size());
+
+        //When
+        final DeleteException thrown = assertThrows(DeleteException.class, () ->
+                appointmentCacheRepository.delete(appointmentToDelete));
+
+        //Then
+        assertEquals("Appointment with id " + appointmentId + " not found", thrown.getMessage());
+        assertEquals(1, appointmentCacheRepository.getList().size());
+    }
+
+    @Test
+    void getLIst_happyFlow() {
+        //Given
+
+        //When
+        final List<Appointment> appointmentList = appointmentCacheRepository.getList();
+
+        //Then
+        assertNotNull(appointmentList);
+        assertEquals(1, appointmentList.size());
+
+    }
+
+    @Test
+    void getLIst_returnsNewListWhenNull() {
+        //Given
+        appointmentCacheRepository.setList(null);
+
+        //When
+        final List<Appointment> appointmentList = appointmentCacheRepository.getList();
+
+        //Then
+        assertNotNull(appointmentList);
+        assert(appointmentList.isEmpty());
+
     }
 
     private List<Appointment> createAppointmentList(final int appointmentNumber) {

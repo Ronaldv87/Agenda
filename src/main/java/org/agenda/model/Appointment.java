@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class Appointment {
     private final int appointmentId;
-    private final LocalDateTime startDateTime;
-    private final LocalDateTime endDateTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     public Appointment(final int appointmentId,
                        final LocalDateTime startDateTime,
@@ -35,5 +35,13 @@ public class Appointment {
 
     public LocalDateTime getEndDateTime() {
         return endDateTime;
+    }
+
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 }
