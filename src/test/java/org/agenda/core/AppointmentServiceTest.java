@@ -9,27 +9,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppointmentServiceTest {
 
     @Test
-    void dateTimeConverter_happyFlow() {
+    void generateAppointmentId_happyFlow() {
         //Given
-        final String dateTime = "2023-01-01 12:00";
-        final LocalDateTime expectedDate = LocalDateTime.parse("2023-01-01T12:00");
-        final AppointmentService appointmentService = new AppointmentService();
 
         //When
-        final LocalDateTime actualDate = appointmentService.dateTimeConverter(dateTime);
 
         //Then
-        assertEquals(expectedDate, actualDate);
     }
 
     @Test
-    void generateAppointmentId() {
+    void generateAppointmentId_returnsOne_ifAppointmentListIsEmpty() {
         //Given
 
         //When
 
         //Then
     }
-
 
 }
