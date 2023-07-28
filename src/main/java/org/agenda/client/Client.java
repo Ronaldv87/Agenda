@@ -30,22 +30,15 @@ public class Client {
         int menuNumber = 0;
         while((menuNumber < 1) | (menuNumber > 6)) {
             menuNumber = Integer.parseInt(sc.nextLine());
-            if (menuNumber <= 6) {
-                menuActions(menuNumber);
-            } else {
-                System.out.println("Please enter a valid number");
+            switch (menuNumber) {
+                case 1 -> displayAllAppointments();
+                case 2 -> createAppointment();
+                case 3 -> openAppointment();
+                case 4 -> updateAppointment();
+                case 5 -> deleteAppointment();
+                case 6 -> System.exit(0);
             }
-        }
-    }
-
-    private void menuActions(int menuNumber) {
-        switch (menuNumber) {
-            case 1 -> displayAllAppointments();
-            case 2 -> createAppointment();
-            case 3 -> openAppointment();
-            case 4 -> updateAppointment();
-            case 5 -> deleteAppointment();
-            case 6 -> System.exit(0);
+            System.out.println("Please enter a valid number");
         }
     }
 
