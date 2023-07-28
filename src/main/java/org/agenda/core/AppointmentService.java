@@ -34,7 +34,7 @@ public class AppointmentService {
     }
 
     Integer generateAppointmentId() {
-        final List<Appointment> appointmentList = appointmentRepo.getList();
+        List<Appointment> appointmentList = getAllAppointments();
         if(appointmentList.size() < 1) {
             return 1;
         }
