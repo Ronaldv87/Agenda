@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Client {
 
-    private ClientController clientController;
+    private final ClientController clientController;
 
     public Client() {
         this.clientController = new ClientController();
