@@ -1,5 +1,6 @@
-package org.agenda.core;
+package org.agenda.core.mapper;
 
+import org.agenda.core.service.AppointmentService;
 import org.agenda.model.Appointment;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,8 +10,8 @@ import java.util.List;
 public class AppointmentMapper {
     private final AppointmentService appointmentService;
 
-    public AppointmentMapper() {
-        this.appointmentService = new AppointmentService();
+    public AppointmentMapper(final AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
     }
 
     public Appointment convertStringToAppointment(final String randomData) {
