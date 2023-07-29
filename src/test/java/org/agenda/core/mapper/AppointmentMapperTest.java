@@ -1,6 +1,10 @@
-package org.agenda.core;
+package org.agenda.core.mapper;
 
+import org.agenda.core.service.AppointmentService;
 import org.agenda.model.Appointment;
+import org.agenda.repo.AppointmentCacheRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -9,6 +13,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AppointmentMapperTest {
 
+    private AppointmentMapper appointmentMapper;
+
+    private AppointmentCacheRepository appointmentCacheRepository;
+
+    @BeforeEach
+    void setupTest() {
+        final AppointmentService appointmentService = new AppointmentService(this.appointmentCacheRepository);
+        this.appointmentMapper = new AppointmentMapper(appointmentService);
+    }
+
+    @AfterEach
+    void teardownTest() {
+        this.appointmentMapper =null;
+    }
+
     @Test
     void convertStringToAppointment_HappyFlow() {
         //Given
@@ -16,7 +35,6 @@ class AppointmentMapperTest {
         final int expectedAppointmentId = 1;
         final LocalDateTime expectedStartDateTime = LocalDateTime.parse("2023-01-02T11:00");
         final LocalDateTime expectedEndDateTime = LocalDateTime.parse("2023-01-02T12:00");
-        final AppointmentMapper appointmentMapper = new AppointmentMapper();
 
         //When
         final Appointment appointment = appointmentMapper.convertStringToAppointment(randomData);
@@ -35,7 +53,6 @@ class AppointmentMapperTest {
         final Appointment appointment = new Appointment(1,
                 LocalDateTime.parse("2023-01-02T11:00"),
                 LocalDateTime.parse("2023-01-02T12:00"));
-        final AppointmentMapper appointmentMapper = new AppointmentMapper();
 
         //When
         final String actualStringOutput = appointmentMapper.convertAppointmentToString(appointment);
@@ -59,7 +76,6 @@ class AppointmentMapperTest {
         //Given
         final String dateTime = "2023-01-01 12:00";
         final LocalDateTime expectedDate = LocalDateTime.parse("2023-01-01T12:00");
-        final AppointmentMapper appointmentMapper = new AppointmentMapper();
 
         //When
         final LocalDateTime actualDate = appointmentMapper.dateTimeConverter(dateTime);
@@ -73,7 +89,6 @@ class AppointmentMapperTest {
         //Given
         final String expectedDate = "2023-01-01 12:00";
         final LocalDateTime dateTime= LocalDateTime.parse("2023-01-01T12:00");
-        final AppointmentMapper appointmentMapper = new AppointmentMapper();
 
         //When
         final String actualDate = appointmentMapper.dateTimeConverter(dateTime);

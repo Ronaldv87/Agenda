@@ -1,4 +1,4 @@
-package org.agenda.core;
+package org.agenda.core.service;
 
 import org.agenda.model.Appointment;
 import org.agenda.repo.AppointmentCacheRepository;
@@ -9,8 +9,8 @@ public class AppointmentService {
 
     private final AppointmentCacheRepository appointmentRepo;
 
-    public AppointmentService() {
-        this.appointmentRepo = new AppointmentCacheRepository();
+    public AppointmentService(final AppointmentCacheRepository appointmentCacheRepository) {
+        this.appointmentRepo = appointmentCacheRepository;
     }
 
     public Appointment create(final Appointment appointment) {
@@ -33,7 +33,7 @@ public class AppointmentService {
         return appointmentRepo.getList();
     }
 
-    Integer generateAppointmentId() {
+    public Integer generateAppointmentId() {
         List<Appointment> appointmentList = getAllAppointments();
         if(appointmentList.size() < 1) {
             return 1;

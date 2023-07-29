@@ -1,10 +1,10 @@
 package org.agenda;
 
-import org.agenda.client.Client;
+import org.agenda.client.ConsoleClient;
 
 public class Main {
     public static void main(String[] args) {
-        Client client = new Client();
+        ConsoleClient client = new ConsoleClient();
         client.start();
     }
 }

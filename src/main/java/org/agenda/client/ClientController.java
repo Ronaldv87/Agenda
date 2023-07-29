@@ -1,8 +1,9 @@
 package org.agenda.client;
 
-import org.agenda.core.AppointmentMapper;
-import org.agenda.core.AppointmentService;
+import org.agenda.core.mapper.AppointmentMapper;
+import org.agenda.core.service.AppointmentService;
 import org.agenda.model.Appointment;
+import org.agenda.repo.AppointmentCacheRepository;
 
 import java.util.List;
 
@@ -12,8 +13,10 @@ public class ClientController {
     private final AppointmentService appointmentService;
 
     public ClientController() {
-        this.appointmentMapper = new AppointmentMapper();
-        this.appointmentService = new AppointmentService();
+        // Necessary evil right here.. solution would be to use the Factory Pattern.
+        final AppointmentCacheRepository appointmentCacheRepository = new AppointmentCacheRepository();
+        this.appointmentService = new AppointmentService(appointmentCacheRepository);
+        this.appointmentMapper = new AppointmentMapper(this.appointmentService);
     }
 
     public void createAppointment(String dateTime) {

@@ -2,11 +2,11 @@ package org.agenda.client;
 
 import java.util.Scanner;
 
-public class Client {
+public class ConsoleClient {
 
     private final ClientController clientController;
 
-    public Client() {
+    public ConsoleClient() {
         this.clientController = new ClientController();
     }
 
