@@ -11,7 +11,6 @@ public class AppointmentCacheRepository {
     private List<Appointment> appointmentList = new ArrayList<>();
 
     public AppointmentCacheRepository() {
-//        appointmentList.add(new Appointment());
     }
 
     public Appointment create(final Appointment appointment) {
