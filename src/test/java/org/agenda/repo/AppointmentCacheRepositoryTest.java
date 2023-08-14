@@ -34,29 +34,30 @@ class AppointmentCacheRepositoryTest {
         final int appointmentId = 1;
         final LocalDateTime startDateTime = LocalDateTime.now();
         final LocalDateTime endDateTime = startDateTime.plusHours(1);
+        final Appointment appointment = new Appointment(appointmentId, startDateTime, endDateTime);
         this.appointmentCacheRepository = new AppointmentCacheRepository();
         assertEquals(0, appointmentCacheRepository.getList().size());
 
         //When
-
-        final Appointment appointment = appointmentCacheRepository.create(appointmentId, startDateTime, endDateTime);
+        final Appointment appointmentToCreate = appointmentCacheRepository.create(appointment);
 
         //Then
-        assertNotNull(appointment);
-        assertEquals(appointmentId, appointment.getAppointmentId());
-        assertEquals(startDateTime, appointment.getStartDateTime());
-        assertEquals(endDateTime, appointment.getEndDateTime());
+        assertNotNull(appointmentToCreate);
+        assertEquals(appointmentId, appointmentToCreate.getAppointmentId());
+        assertEquals(startDateTime, appointmentToCreate.getStartDateTime());
+        assertEquals(endDateTime, appointmentToCreate.getEndDateTime());
         assertEquals(1, appointmentCacheRepository.getList().size());
     }
 
     @Test
     void create_shouldThrowCreationException_appointmentAlreadyExists() {
         //Given
+        final Appointment appointment = new Appointment(appointmentId, startDateTime, endDateTime);
         assertEquals(1, appointmentCacheRepository.getList().size());
 
         //When
         final CreationException thrown = assertThrows(CreationException.class, () ->
-                appointmentCacheRepository.create(appointmentId, startDateTime, endDateTime));
+                appointmentCacheRepository.create(appointment));
 
         //Then
         assertEquals("This appointment with " + appointmentId + " already exists", thrown.getMessage());

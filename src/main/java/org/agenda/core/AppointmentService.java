@@ -3,27 +3,43 @@ package org.agenda.core;
 import org.agenda.model.Appointment;
 import org.agenda.repo.AppointmentCacheRepository;
 
+import java.util.List;
+
 public class AppointmentService {
 
-    private AppointmentCacheRepository appointmentRepo;
+    private final AppointmentCacheRepository appointmentRepo;
 
     public AppointmentService() {
         this.appointmentRepo = new AppointmentCacheRepository();
     }
 
-//    public Appointment read(final String id) {
-//        return appointmentRepo.read(id);
-//    }
-//
-//    public boolean delete(final String id) {
-//        return appointmentRepo.delete(id);
-//    }
-//
-//    public Appointment update(final Appointment appointment) {
-//        return appointmentRepo.update(appointment);
-//    }
-//
-//    public Appointment create(final String randomData) {
-//        return appointmentRepo.create(randomData);
-//    }
+    public Appointment create(final Appointment appointment) {
+        return appointmentRepo.create(appointment);
+    }
+
+    public Appointment read(final String id) {
+        return appointmentRepo.read(Integer.parseInt(id));
+    }
+
+    public Appointment update(final Appointment appointment) {
+        return appointmentRepo.update(appointment);
+    }
+
+    public boolean delete(final Appointment appointment) {
+        return appointmentRepo.delete(appointment);
+    }
+
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepo.getList();
+    }
+
+    Integer generateAppointmentId() {
+        final List<Appointment> appointmentList = appointmentRepo.getList();
+        if(appointmentList.size() < 1) {
+            return 1;
+        }
+        final int lastRecordInList = appointmentList.size() - 1;
+        final Appointment appointment = appointmentList.get(lastRecordInList);
+        return appointment.getAppointmentId() + 1;
+    }
 }

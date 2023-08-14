@@ -14,10 +14,7 @@ public class AppointmentCacheRepository {
 //        appointmentList.add(new Appointment());
     }
 
-    public Appointment create(final int appointmentId,
-                              final LocalDateTime startDateTime,
-                              final LocalDateTime endDateTime) throws CreationException{
-        final Appointment appointment = new Appointment(appointmentId, startDateTime, endDateTime);
+    public Appointment create(final Appointment appointment) {
         boolean appointmentIsAlreadyPresent = false;
         for (Appointment existingEntry : appointmentList) {
             if(existingEntry.getAppointmentId() == appointment.getAppointmentId()) {
@@ -33,7 +30,7 @@ public class AppointmentCacheRepository {
         return appointment;
     }
 
-    public Appointment read(final int appointmentId) throws ReadException{
+    public Appointment read(final int appointmentId) {
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointmentId() == appointmentId) {
                 return appointment;
@@ -42,7 +39,7 @@ public class AppointmentCacheRepository {
         throw new ReadException("Appointment with id " + appointmentId + " not found");
     }
 
-    public Appointment update(Appointment appointment) throws UpdateExeption {
+    public Appointment update(Appointment appointment) {
         for(Appointment appointmentToUpdate : appointmentList) {
             if(appointmentToUpdate.getAppointmentId() == appointment.getAppointmentId()) {
                 appointmentToUpdate.setStartDateTime(appointment.getStartDateTime());
@@ -53,7 +50,7 @@ public class AppointmentCacheRepository {
         throw new UpdateExeption("Appointment with id " + appointment.getAppointmentId() + " not found");
     }
 
-    public boolean delete(Appointment appointment) throws DeleteException {
+    public boolean delete(Appointment appointment) {
         for(Appointment appointmentToDelete : appointmentList) {
             if(appointmentToDelete.getAppointmentId() == appointment.getAppointmentId()) {
                 appointmentList.remove(appointmentToDelete);
